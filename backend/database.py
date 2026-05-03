@@ -80,3 +80,5 @@ def update_test_questions(test_id: str, new_questions: list, max_order: int):
 def get_all_tests():
     result = supabase.table("tests").select("id, title, max_attempts, created_at").order("created_at", desc=True).execute()
     return result.data
+def update_test_title(test_id: str, title: str):
+    supabase.table("tests").update({"title": title}).eq("id", test_id).execute()

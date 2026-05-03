@@ -123,3 +123,10 @@ async def add_questions_to_test(test_id: str, data: dict):
     max_order = max((q["order_num"] for q in existing), default=0)
     db.update_test_questions(test_id, data["questions"], max_order)
     return {"status": "ok"}
+@app.patch("/api/tests/{test_id}/title")
+async def update_title(test_id: str, data: dict):
+    test = db.get_test(test_id)
+    if not test:
+        raise HTTPException(status_code=404, detail="Тест не найден")
+    db.update_test_title(test_id, data["title"])
+    return {"status": "ok"}

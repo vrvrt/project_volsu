@@ -512,3 +512,14 @@ async function saveMaxAttempts() {
     if (response.ok) alert("Сохранено");
     else alert("Ошибка");
 }
+document.addEventListener("paste", function(e) {
+    if (e.target.tagName === "TEXTAREA") {
+        e.preventDefault();
+    }
+});
+
+document.addEventListener("copy", function(e) {
+    if (e.target.tagName === "TEXTAREA") {
+        e.preventDefault();
+    }
+});
