@@ -66,6 +66,7 @@ def log_attempt(test_id: str, student_name: str, group_name: str, attempt_num: i
         "attempt_num": attempt_num
     }).execute()
 def delete_question(question_id: str):
+    supabase.table("student_answers").delete().eq("question_id", question_id).execute()
     supabase.table("questions").delete().eq("id", question_id).execute()
 
 def update_test_questions(test_id: str, new_questions: list, max_order: int):
