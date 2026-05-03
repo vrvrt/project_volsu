@@ -76,3 +76,6 @@ def update_test_questions(test_id: str, new_questions: list, max_order: int):
             "ideal_answer": q["ideal_answer"],
             "order_num": max_order + q["order_num"]
         }).execute()
+def get_all_tests():
+    result = supabase.table("tests").select("id, title, max_attempts, created_at").order("created_at", desc=True).execute()
+    return result.data

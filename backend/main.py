@@ -39,6 +39,10 @@ async def get_test(test_id: str):
         "max_attempts": test["max_attempts"],
         "questions": [{"id": q["id"], "question_text": q["question_text"]} for q in questions]
     }
+@app.get("/api/tests")
+async def get_all_tests():
+    tests = db.get_all_tests()
+    return {"tests": tests}
 
 @app.post("/api/submit")
 async def submit_test(data: SubmitTest):

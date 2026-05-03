@@ -10,6 +10,7 @@ function showTab(name, el) {
     if (el) el.classList.add("active");
     if (name === "edit") renderSavedTests();
 }
+
 // ─── ПРЕПОДАВАТЕЛЬ: СОЗДАТЬ ТЕСТ ─────────────────
 
 let questionCount = 0;
@@ -54,11 +55,13 @@ async function saveTest() {
 
     if (questions.length === 0) { alert("Добавь хотя бы один вопрос"); return; }
 
+    const response = await fetch(`${API}/api/tests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, max_attempts: maxAttempts, questions })
+    });
+
     const data = await response.json();
-    // добавь сюда:
-    const saved = JSON.parse(localStorage.getItem("myTests") || "[]");
-    saved.push({ id: data.test_id, title: title, created: new Date().toLocaleDateString() });
-    localStorage.setItem("myTests", JSON.stringify(saved));
 
     const msg = document.getElementById("message");
     msg.classList.remove("hidden");
@@ -96,7 +99,6 @@ async function loadResults() {
     const questionsMap = {};
     testData.questions.forEach(q => { questionsMap[q.id] = q.question_text; });
 
-    // Группируем по ученику
     const byStudent = {};
     data.results.forEach(r => {
         const key = `${r.student_name}__${r.group_name}`;
@@ -106,7 +108,6 @@ async function loadResults() {
 
     const students = Object.values(byStudent);
 
-    // Общая статистика
     const allScores = data.results.map(r => r.score);
     const avgAll = allScores.reduce((a, b) => a + b, 0) / allScores.length;
     const maxScore = Math.max(...allScores);
@@ -116,7 +117,6 @@ async function loadResults() {
         return avg >= 70;
     }).length;
 
-    // Статистика по вопросам
     const byQuestion = {};
     data.results.forEach(r => {
         if (!byQuestion[r.question_id]) byQuestion[r.question_id] = [];
@@ -147,11 +147,9 @@ async function loadResults() {
         </div>
     `;
 
-    // Уничтожаем старые графики если были
     if (window.chartScoresInstance) window.chartScoresInstance.destroy();
     if (window.chartQuestionsInstance) window.chartQuestionsInstance.destroy();
 
-    // График 1 — распределение баллов
     const studentAvgs = students.map(s =>
         Math.round(s.answers.reduce((a, b) => a + b.score, 0) / s.answers.length)
     );
@@ -184,7 +182,6 @@ async function loadResults() {
         }
     );
 
-    // График 2 — средний балл по вопросам
     const qLabels = Object.keys(byQuestion).map((qid, i) => `Вопрос ${i + 1}`);
     const qAvgs = Object.values(byQuestion).map(scores =>
         parseFloat((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1))
@@ -212,7 +209,6 @@ async function loadResults() {
         }
     );
 
-    // Статистика по вопросам текстом
     document.getElementById("questions-stats").innerHTML = `
         <h3 style="margin-bottom:10px;">Детали по вопросам</h3>
         ${Object.entries(byQuestion).map(([qid, scores], i) => {
@@ -233,7 +229,6 @@ async function loadResults() {
         }).join("")}
     `;
 
-    // По каждому ученику
     document.getElementById("students").classList.remove("hidden");
     document.getElementById("students-list").innerHTML = students.map(student => {
         const avg = student.answers.reduce((s, a) => s + a.score, 0) / student.answers.length;
@@ -398,6 +393,7 @@ async function loadTestForEdit() {
     editQuestionCount = 0;
 
     document.getElementById("edit-test-title").textContent = data.title;
+    document.getElementById("edit-max-attempts").value = data.max_attempts;
 
     document.getElementById("edit-questions-list").innerHTML = data.questions.map(q => `
         <div class="question-block" id="eq-${q.id}">
@@ -469,19 +465,27 @@ async function saveNewQuestions() {
         alert("Ошибка при сохранении");
     }
 }
-function renderSavedTests() {
-    const saved = JSON.parse(localStorage.getItem("myTests") || "[]");
+
+async function renderSavedTests() {
     const container = document.getElementById("saved-tests-list");
-    if (saved.length === 0) {
-        container.innerHTML = "<p style='color:#999; font-size:13px;'>Пока нет сохранённых тестов</p>";
+    container.innerHTML = "<p style='color:#999; font-size:13px;'>Загрузка...</p>";
+
+    const response = await fetch(`${API}/api/tests`);
+    const data = await response.json();
+
+    if (!data.tests || data.tests.length === 0) {
+        container.innerHTML = "<p style='color:#999; font-size:13px;'>Пока нет тестов</p>";
         return;
     }
-    container.innerHTML = saved.map(t => `
+
+    container.innerHTML = data.tests.map(t => `
         <div style="display:flex; align-items:center; gap:15px; padding:8px 12px;
                     background:#f9f9f9; border-radius:6px; margin-bottom:8px;">
             <div style="flex:1;">
                 <strong>${t.title}</strong>
-                <span style="color:#999; font-size:12px; margin-left:10px;">${t.created}</span>
+                <span style="color:#999; font-size:12px; margin-left:10px;">
+                    ${new Date(t.created_at).toLocaleDateString()}
+                </span>
             </div>
             <code style="background:#eee; padding:3px 8px; border-radius:4px; font-size:13px;">
                 ${t.id}
