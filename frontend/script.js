@@ -523,5 +523,14 @@ document.addEventListener("copy", function(e) {
         e.preventDefault();
     }
 });
-
-findstr "saveTestTitle" frontend\script.js
+async function saveTestTitle() {
+    const title = document.getElementById("edit-test-title-input").value.trim();
+    if (!title) { alert("Название не может быть пустым"); return; }
+    const response = await fetch(`${API}/api/tests/${editTestId}/title`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+    });
+    if (response.ok) alert("Название сохранено");
+    else alert("Ошибка");
+}
