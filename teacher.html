@@ -43,7 +43,10 @@
             <button onclick="loadTestForEdit()">Загрузить</button>
         </div>
         <div id="edit-content" class="hidden">
-            <h2 id="edit-test-title"></h2>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+    <input type="text" id="edit-test-title-input" style="font-size:18px; font-weight:bold; flex:1;">
+    <button onclick="saveTestTitle()">Сохранить название</button>
+</div>
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
                 <label style="font-size:14px; color:#555;">Количество попыток:</label>
                 <input type="number" id="edit-max-attempts" value="1" min="1" max="10"
