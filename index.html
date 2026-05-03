@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тестирование</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+    <!-- Экран 1: ввод данных -->
+    <div id="screen-start">
+        <h1>Тестирование</h1>
+        <input type="text" id="testId" placeholder="ID теста (получи у преподавателя)">
+        <input type="text" id="studentName" placeholder="Твоё имя">
+        <input type="text" id="groupName" placeholder="Группа">
+        <button onclick="startTest()">Начать тест</button>
+    </div>
+
+    <!-- Экран 2: вопросы -->
+    <div id="screen-test" class="hidden">
+        <h1 id="testTitle"></h1>
+        <div id="questions"></div>
+        <button onclick="submitTest()" style="background:#27ae60;">
+            Отправить ответы
+        </button>
+    </div>
+
+    <!-- Экран 3: результаты -->
+    <div id="screen-results" class="hidden">
+        <h1>Результаты</h1>
+        <p>Средний балл: <span class="score" id="avgScore"></span></p>
+        <div id="results"></div>
+        <button onclick="location.reload()">Пройти ещё раз</button>
+    </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
