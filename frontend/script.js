@@ -392,7 +392,7 @@ async function loadTestForEdit() {
     editTestId = id;
     editQuestionCount = 0;
 
-    document.getElementById("edit-test-title").textContent = data.title;
+    document.getElementById("edit-test-title-input").value = data.title;
     document.getElementById("edit-max-attempts").value = data.max_attempts;
 
     document.getElementById("edit-questions-list").innerHTML = data.questions.map(q => `
