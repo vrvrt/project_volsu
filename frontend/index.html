@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Тестирование</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+    textarea { user-select: none; }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -11,7 +14,7 @@
     <!-- Экран 1: ввод данных -->
     <div id="screen-start">
         <h1>Тестирование</h1>
-        <input type="text" id="testId" placeholder="ID теста (получи у преподавателя)">
+        <input type="text" id="testId" placeholder="ID теста">
         <input type="text" id="studentName" placeholder="Твоё имя">
         <input type="text" id="groupName" placeholder="Группа">
         <button onclick="startTest()">Начать тест</button>
