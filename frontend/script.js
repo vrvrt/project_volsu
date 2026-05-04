@@ -512,25 +512,15 @@ async function saveMaxAttempts() {
     if (response.ok) alert("Сохранено");
     else alert("Ошибка");
 }
-document.addEventListener("paste", function(e) {
-    if (e.target.tagName === "TEXTAREA") {
-        e.preventDefault();
-    }
-});
 
-document.addEventListener("copy", function(e) {
-    if (e.target.tagName === "TEXTAREA") {
-        e.preventDefault();
-    }
-});
 async function saveTestTitle() {
     const title = document.getElementById("edit-test-title-input").value.trim();
-    if (!title) { alert("Название не может быть пустым"); return; }
+    if (!title) { alert("Title cannot be empty"); return; }
     const response = await fetch(`${API}/api/tests/${editTestId}/title`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title })
     });
-    if (response.ok) alert("Название сохранено");
-    else alert("Ошибка");
+    if (response.ok) alert("Saved!");
+    else alert("Error");
 }

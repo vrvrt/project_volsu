@@ -8,6 +8,13 @@
     textarea { user-select: none; }
     </style>
 </head>
+<script>
+document.addEventListener("paste", function(e) {
+    if (e.target.tagName === "TEXTAREA") {
+        e.preventDefault();
+    }
+});
+</script>
 <body>
 <div class="container">
 
