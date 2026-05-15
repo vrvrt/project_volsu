@@ -31,7 +31,7 @@ async def create_test(data: TestCreate):
 async def get_test(test_id: str):
     test = db.get_test(test_id)
     if not test:
-        raise HTTPException(status_code=404, detail="Тест не найден")
+        raise HTTPException(status_code=404, detail="Опрос не найден")
     questions = db.get_questions(test_id)
     return {
         "test_id": test_id,
@@ -49,7 +49,7 @@ async def submit_test(data: SubmitTest):
     # Проверяем количество попыток
     test = db.get_test(data.test_id)
     if not test:
-        raise HTTPException(status_code=404, detail="Тест не найден")
+        raise HTTPException(status_code=404, detail="Опрос не найден")
 
     attempts_used = db.get_attempt_count(data.test_id, data.student_name, data.group_name)
     max_attempts = test.get("max_attempts", 1)
@@ -118,7 +118,7 @@ async def delete_question(question_id: str):
 async def add_questions_to_test(test_id: str, data: dict):
     test = db.get_test(test_id)
     if not test:
-        raise HTTPException(status_code=404, detail="Тест не найден")
+        raise HTTPException(status_code=404, detail="Опрос не найден")
     existing = db.get_questions(test_id)
     max_order = max((q["order_num"] for q in existing), default=0)
     db.update_test_questions(test_id, data["questions"], max_order)
@@ -127,6 +127,6 @@ async def add_questions_to_test(test_id: str, data: dict):
 async def update_title(test_id: str, data: dict):
     test = db.get_test(test_id)
     if not test:
-        raise HTTPException(status_code=404, detail="Тест не найден")
+        raise HTTPException(status_code=404, detail="Опрос не найден")
     db.update_test_title(test_id, data["title"])
     return {"status": "ok"}
