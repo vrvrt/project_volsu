@@ -24,7 +24,7 @@ def ping():
 async def create_test(data: TestCreate):
     test = db.create_test(data.title, data.max_attempts)
     for q in data.questions:
-    db.add_question(test["id"], q.question_text, q.ideal_answer, q.order_num, q.max_score)
+        db.add_question(test["id"], q.question_text, q.ideal_answer, q.order_num, q.max_score)
     return {"test_id": test["id"], "title": test["title"], "max_attempts": test["max_attempts"]}
 
 @app.get("/api/tests/{test_id}")
