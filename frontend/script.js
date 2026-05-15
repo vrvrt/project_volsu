@@ -40,7 +40,7 @@ function deleteQuestion(num) {
 async function saveTest() {
     const title = document.getElementById("testTitle").value.trim();
     const maxAttempts = parseInt(document.getElementById("maxAttempts").value) || 1;
-    if (!title) { alert("Введи название теста"); return; }
+    if (!title) { alert("Введи название опроса"); return; }
 
     const questions = [];
     let order = 1;
@@ -278,7 +278,7 @@ async function startTest() {
     }
 
     const response = await fetch(`${API}/api/tests/${testId}`);
-    if (!response.ok) { alert("Тест не найден"); return; }
+    if (!response.ok) { alert("Опрос не найден"); return; }
 
     currentTest = await response.json();
     currentTest.studentName = studentName;
@@ -385,10 +385,10 @@ let editQuestionCount = 0;
 
 async function loadTestForEdit() {
     const id = document.getElementById("editTestId").value.trim();
-    if (!id) { alert("Введи ID теста"); return; }
+    if (!id) { alert("Введи ID опроса"); return; }
 
     const response = await fetch(`${API}/api/tests/${id}`);
-    if (!response.ok) { alert("Тест не найден"); return; }
+    if (!response.ok) { alert("Опрос не найден"); return; }
 
     const data = await response.json();
     editTestId = id;
