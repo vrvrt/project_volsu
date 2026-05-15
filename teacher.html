@@ -11,7 +11,7 @@
     <h1>Панель преподавателя</h1>
 
     <div class="tabs">
-        <button class="tab active" onclick="showTab('create', this)">Создать тест</button>
+        <button class="tab active" onclick="showTab('create', this)">Создать опрос</button>
         <button class="tab" onclick="showTab('edit', this)">Редактировать</button>
         <button class="tab" onclick="showTab('results', this)">Результаты</button>
     </div>
@@ -19,7 +19,7 @@
     <!-- Вкладка: Создать тест -->
     <div id="tab-create">
         <div id="message" class="hidden"></div>
-        <input type="text" id="testTitle" placeholder="Название теста">
+        <input type="text" id="testTitle" placeholder="Название опроса">
         <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
             <label style="font-size:14px; color:#555;">Количество попыток:</label>
             <input type="number" id="maxAttempts" value="1" min="1" max="10"
@@ -28,18 +28,18 @@
         <div id="questions"></div>
         <div style="display:flex; gap:10px; margin-top:10px;">
             <button onclick="addQuestion()">+ Добавить вопрос</button>
-            <button onclick="saveTest()" style="background:#27ae60;">Сохранить тест</button>
+            <button onclick="saveTest()" style="background:#27ae60;">Сохранить опрос</button>
         </div>
     </div>
 
     <!-- Вкладка: Редактировать -->
     <div id="tab-edit" class="hidden">
         <div id="saved-tests-block" style="margin-bottom:20px;">
-            <h3 style="margin-bottom:10px;">Мои тесты</h3>
+            <h3 style="margin-bottom:10px;">Мои опросы</h3>
             <div id="saved-tests-list"></div>
         </div>
         <div style="display:flex; gap:10px; margin-bottom:20px; align-items:center;">
-            <input type="text" id="editTestId" placeholder="ID теста" style="width:200px;">
+            <input type="text" id="editTestId" placeholder="ID опроса" style="width:200px;">
             <button onclick="loadTestForEdit()">Загрузить</button>
         </div>
         <div id="edit-content" class="hidden">

@@ -38,7 +38,7 @@ function deleteQuestion(num) {
 async function saveTest() {
     const title = document.getElementById("testTitle").value.trim();
     const maxAttempts = parseInt(document.getElementById("maxAttempts").value) || 1;
-    if (!title) { alert("Введи название теста"); return; }
+    if (!title) { alert("Введи название опроса"); return; }
 
     const questions = [];
     let order = 1;
@@ -65,7 +65,7 @@ async function saveTest() {
 
     const msg = document.getElementById("message");
     msg.classList.remove("hidden");
-    msg.innerHTML = `Тест создан! ID: <strong>${data.test_id}</strong> — передай этот ID ученикам`;
+    msg.innerHTML = `Опрос создан! ID: <strong>${data.test_id}</strong> — передай этот ID ученикам`;
 }
 
 // ─── ПРЕПОДАВАТЕЛЬ: РЕЗУЛЬТАТЫ ────────────────────
