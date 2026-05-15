@@ -84,7 +84,7 @@ function getColor(score) {
 
 async function loadResults() {
     const testId = document.getElementById("resultTestId").value.trim();
-    if (!testId) { alert("Введи ID теста"); return; }
+    if (!testId) { alert("Введи ID опроса"); return; }
 
     const response = await fetch(`${API}/api/results/${testId}`);
     const data = await response.json();
@@ -276,7 +276,7 @@ async function startTest() {
     }
 
     const response = await fetch(`${API}/api/tests/${testId}`);
-    if (!response.ok) { alert("Тест не найден"); return; }
+    if (!response.ok) { alert("Опрос не найден"); return; }
 
     currentTest = await response.json();
     currentTest.studentName = studentName;
@@ -383,10 +383,10 @@ let editQuestionCount = 0;
 
 async function loadTestForEdit() {
     const id = document.getElementById("editTestId").value.trim();
-    if (!id) { alert("Введи ID теста"); return; }
+    if (!id) { alert("Введи ID опроса"); return; }
 
     const response = await fetch(`${API}/api/tests/${id}`);
-    if (!response.ok) { alert("Тест не найден"); return; }
+    if (!response.ok) { alert("Опрос не найден"); return; }
 
     const data = await response.json();
     editTestId = id;

@@ -9,7 +9,7 @@
     </style>
 </head>
 <script>
-document.addEventListener("paste", function(e) {
+document.addEventListener("paste", function(e) { //запрет копипаста 
     if (e.target.tagName === "TEXTAREA") {
         e.preventDefault();
     }
@@ -20,11 +20,11 @@ document.addEventListener("paste", function(e) {
 
     <!-- Экран 1: ввод данных -->
     <div id="screen-start">
-        <h1>Тестирование</h1>
+        <h1>Опросник</h1>
         <input type="text" id="testId" placeholder="ID теста">
         <input type="text" id="studentName" placeholder="Твоё имя">
         <input type="text" id="groupName" placeholder="Группа">
-        <button onclick="startTest()">Начать тест</button>
+        <button onclick="startTest()">Начать опрос</button>
     </div>
 
     <!-- Экран 2: вопросы -->
