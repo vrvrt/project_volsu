@@ -1,4 +1,6 @@
-const API = "https://project-volsu.onrender.com";
+const API = window.location.hostname === "127.0.0.1" 
+    ? "http://127.0.0.1:8000" 
+    : "https://project-volsu.onrender.com";
 
 // ─── ВКЛАДКИ ─────────────────────────────────────
 function showTab(name, el) {
