@@ -16,12 +16,13 @@ def create_test(title: str, max_attempts: int = 1):
     }).execute()
     return result.data[0]
 
-def add_question(test_id: str, question_text: str, ideal_answer: str, order_num: int):
+def add_question(test_id: str, question_text: str, ideal_answer: str, order_num: int, max_score: int = 10):
     result = supabase.table("questions").insert({
         "test_id": test_id,
         "question_text": question_text,
         "ideal_answer": ideal_answer,
-        "order_num": order_num
+        "order_num": order_num,
+        "max_score": max_score
     }).execute()
     return result.data[0]
 

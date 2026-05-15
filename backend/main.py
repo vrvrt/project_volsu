@@ -24,7 +24,7 @@ def ping():
 async def create_test(data: TestCreate):
     test = db.create_test(data.title, data.max_attempts)
     for q in data.questions:
-        db.add_question(test["id"], q.question_text, q.ideal_answer, q.order_num)
+    db.add_question(test["id"], q.question_text, q.ideal_answer, q.order_num, q.max_score)
     return {"test_id": test["id"], "title": test["title"], "max_attempts": test["max_attempts"]}
 
 @app.get("/api/tests/{test_id}")
@@ -37,7 +37,7 @@ async def get_test(test_id: str):
         "test_id": test_id,
         "title": test["title"],
         "max_attempts": test["max_attempts"],
-        "questions": [{"id": q["id"], "question_text": q["question_text"]} for q in questions]
+        "questions": [{"id": q["id"], "question_text": q["question_text"], "max_score": q.get("max_score", 10)} for q in questions]
     }
 @app.get("/api/tests")
 async def get_all_tests():
@@ -73,8 +73,9 @@ async def submit_test(data: SubmitTest):
         evaluation = await llm.evaluate_answer(
             ideal_answer=q["ideal_answer"],
             student_answer=answer["answer_text"],
-            question=q["question_text"]
-        )
+            question=q["question_text"],
+            max_score=q.get("max_score", 10)
+            )
 
         db.save_answer(
             test_id=data.test_id,

@@ -5,6 +5,12 @@ class Question(BaseModel):
     question_text: str
     ideal_answer: str
     order_num: int
+    
+class Question(BaseModel):
+    question_text: str
+    ideal_answer: str
+    order_num: int
+    max_score: int = 10
 
 class TestCreate(BaseModel):
     title: str

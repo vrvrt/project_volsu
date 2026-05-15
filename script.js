@@ -1,4 +1,6 @@
-const API = "https://project-volsu.onrender.com";
+const API = window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:8000"
+    : "https://project-volsu.onrender.com";
 
 // ─── ВКЛАДКИ ─────────────────────────────────────
 function showTab(name, el) {
@@ -26,6 +28,11 @@ function addQuestion() {
         <p><strong>Вопрос ${questionCount}</strong></p>
         <input type="text" placeholder="Текст вопроса" id="qtext-${questionCount}">
         <textarea placeholder="Эталонный ответ" id="qanswer-${questionCount}"></textarea>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+            <label style="font-size:13px; color:#555;">Максимальный балл:</label>
+            <input type="number" id="qscore-${questionCount}" value="10" min="1" max="100"
+                   style="width:70px; margin:0;">
+        </div>
     `;
     container.appendChild(div);
 }
@@ -49,7 +56,8 @@ async function saveTest() {
         const text = textEl.value.trim();
         const answer = answerEl.value.trim();
         if (text && answer) {
-            questions.push({ question_text: text, ideal_answer: answer, order_num: order++ });
+            const maxScore = parseInt(document.getElementById(`qscore-${i}`)?.value) || 10;
+            questions.push({ question_text: text, ideal_answer: answer, order_num: order++, max_score: maxScore });
         }
     }
 
@@ -401,6 +409,10 @@ async function loadTestForEdit() {
                 ✕ Удалить
             </button>
             <p><strong>${q.question_text}</strong></p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+                <label style="font-size:13px; color:#555;">Макс. балл:</label>
+                <span style="font-weight:bold;">${q.max_score || 10}</span>
+            </div>
         </div>
     `).join("");
 
@@ -433,6 +445,11 @@ function addEditQuestion() {
         <p><strong>Новый вопрос ${editQuestionCount}</strong></p>
         <input type="text" placeholder="Текст вопроса" id="neq-text-${editQuestionCount}">
         <textarea placeholder="Эталонный ответ" id="neq-answer-${editQuestionCount}"></textarea>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+            <label style="font-size:13px; color:#555;">Максимальный балл:</label>
+            <input type="number" id="neq-score-${editQuestionCount}" value="10" min="1" max="100"
+                   style="width:70px; margin:0;">
+        </div>
     `;
     container.appendChild(div);
 }
@@ -445,8 +462,9 @@ async function saveNewQuestions() {
         const num = input.id.replace("neq-text-", "");
         const text = input.value.trim();
         const answer = document.getElementById(`neq-answer-${num}`).value.trim();
+        const maxScore = parseInt(document.getElementById(`neq-score-${num}`)?.value) || 10;
         if (text && answer) {
-            newQuestions.push({ question_text: text, ideal_answer: answer, order_num: order++ });
+            newQuestions.push({ question_text: text, ideal_answer: answer, order_num: order++, max_score: maxScore });
         }
     });
 
@@ -474,7 +492,7 @@ async function renderSavedTests() {
     const data = await response.json();
 
     if (!data.tests || data.tests.length === 0) {
-        container.innerHTML = "<p style='color:#999; font-size:13px;'>Пока нет тестов</p>";
+        container.innerHTML = "<p style='color:#999; font-size:13px;'>Пока нет опросов</p>";
         return;
     }
 
@@ -509,17 +527,18 @@ async function saveMaxAttempts() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ max_attempts: val })
     });
-    if (response.ok) alert("Сохранено");
-    else alert("Ошибка");
+    if (response.ok) alert("Saved!");
+    else alert("Error");
 }
-document.addEventListener("paste", function(e) {
-    if (e.target.tagName === "TEXTAREA") {
-        e.preventDefault();
-    }
-});
 
-document.addEventListener("copy", function(e) {
-    if (e.target.tagName === "TEXTAREA") {
-        e.preventDefault();
-    }
-});
+async function saveTestTitle() {
+    const title = document.getElementById("edit-test-title-input").value.trim();
+    if (!title) { alert("Title cannot be empty"); return; }
+    const response = await fetch(`${API}/api/tests/${editTestId}/title`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+    });
+    if (response.ok) alert("Saved!");
+    else alert("Error");
+}
